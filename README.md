@@ -1,3 +1,2 @@
-# Project 1
+# flask application
 
-Web Programming with Python and JavaScript
