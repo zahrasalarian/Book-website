@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session,render_template
+from flask import Flask, session,render_template,request
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -24,4 +24,12 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/")
 def index():
     return render_template("register.html")
-    # return "helooooo"
+
+@app.route("/sign_up" , methods=["POST" , "GET"])
+def sign_up():
+    if request.method == "GET":
+        return "ahoooooooo"
+    if request.method == 'POST':
+        email = request.form.get("email")
+    # passwrd=request.form.get("password")
+        return render_template("signup.html" , email =email)
