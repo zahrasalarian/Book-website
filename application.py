@@ -28,8 +28,15 @@ def index():
 @app.route("/sign_up" , methods=["POST" , "GET"])
 def sign_up():
     if request.method == "GET":
-        return "ahoooooooo"
+        return "Please sign up first!"
     if request.method == 'POST':
+        username = request.form.get("username")
         email = request.form.get("email")
-    # passwrd=request.form.get("password")
-        return render_template("signup.html" , email =email)
+        password = request.form.get("password")
+        if db.execute("SELECT * FROM users WHERE username = :username",{"username": username}).rowcount == 0:
+            db.execute("INSERT INTO users (email,password,username) VALUES (:email , :password , :username)" , {
+            "email": email, "password":password , "username": username })
+            db.commit()
+            return render_template("signup.html" , Username =username)
+        else:
+            return "sorry this username already exists ,you should peak another username"
