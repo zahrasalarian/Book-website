@@ -33,7 +33,7 @@ def sign_up():
         username = request.form.get("username")
         email = request.form.get("email")
         password = request.form.get("password")
-        if db.execute("SELECT * FROM users WHERE username = :username",{"username": username}).rowcount == 0:
+        if (db.execute("SELECT * FROM users WHERE username = :username",{"username": username}).rowcount == 0) and (db.execute("SELECT * FROM users WHERE email = :email",{"email": email}).rowcount == 0):
             db.execute("INSERT INTO users (email,password,username) VALUES (:email , :password , :username)" , {
             "email": email, "password":password , "username": username })
             db.commit()
