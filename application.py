@@ -24,14 +24,17 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
+    session["users"] = []
     return render_template("register.html")
-    # return "helooooo"
 
+# when user doesn't have any account yet
 @app.route("/sign_up" , methods=["POST" , "GET"])
 def sign_up():
     if request.method == "GET":
         return "Please sign up first!"
     if request.method == 'POST':
+        if session.get("users") is None:
+            session["users"] = []
         username = request.form.get("username")
         email = request.form.get("email")
         password = request.form.get("password")
@@ -39,10 +42,11 @@ def sign_up():
             db.execute("INSERT INTO users (email,password,username) VALUES (:email , :password , :username)" , {
             "email": email, "password":password , "username": username })
             db.commit()
+            session["users"].append(username)
             return render_template("signup.html" , Username =session["users"])
         else:
-            return "sorry this username already exists ,you should peak another username"
-
+            return "sorry this username or email already exists ,you should peak another username"
+# when user already has an account
 @app.route("/log_in", methods=["POST" , "GET"])
 def log_in():
     if request.method == "GET":
@@ -60,3 +64,27 @@ def log_in():
             return render_template("login.html" , users=session["users"])
         else:
             return render_template("error.html")
+
+# search engine
+@app.route("/search_results", methods=["POST", "GET"])
+def search_results():
+    if request.method == "GET":
+        return "Please sign up first!"
+    if request.method == 'POST':
+        search = request.form.get("search")
+        search = str(search)
+        # temp = ["%"]
+        # temp = temp + search
+        # temp.append("%")
+        # print(temp)
+        # final_search = ''
+        # for t in temp:
+        # print(final_search)
+            # final_search += t
+        db.execute("SET final = :final", {"final": search})
+        # founded_books = db.execute("SELECT * FROM books WHERE MATCH(`isbn_number`,`title`,`author`,`publication_year`) AGAINST (final_search)")
+        founded_books = db.execute("SELECT * FROM books5 WHERE author LIKE CONCAT('%' , final , '%') ").fetchall()
+        if founded_books == None:
+            return render_template("search_results.html", results=["poooof"])
+        else:
+            return render_template("search_results.html", results=founded_books)
