@@ -1,35 +1,64 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
 <html>
     <head>
         <title>My Webpage</title>
         <body>
           <h1>isbn_numbers</h1>
-          <ul>
+          <!-- <ul> -->
             {% for isbn_number in isbn_numbers %}
-                <li>{{isbn_number}}</li>
+            <div class="card" style="width: 20rem;">
+             <div class="card-body">
+              <h5 class="card-title">{{isbn_number}}</h5>
+              <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+              <a href="#!" class="btn btn-primary">Go somewhere</a>
+            </div>
+          </div>
             {% endfor %}
-          </ul>
+          <!-- </ul> -->
 
           <h1>authors</h1>
-          <ul>
+          <!-- <ul> -->
             {% for author in authors %}
-                <li>{{author}}</li>
+                <!-- <li>{{author}}</li> -->
+              <div class="card" style="width: 20rem;">
+               <div class="card-body">
+                <h5 class="card-title">{{author}}</h5>
+                <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+                <a href="#!" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
             {% endfor %}
-          </ul>
+          <!-- </ul> -->
 
           <h1>titles</h1>
-          <ul>
+          <!-- <ul> -->
             {% for title in titles %}
-                <li>{{title}}</li>
+                <!-- <li>{{title}}</li> -->
+                <div class="card" style="width: 20rem;">
+                 <div class="card-body">
+                  <h5 class="card-title">{{title}}</h5>
+                  <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+                  <a href="#!" class="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>
             {% endfor %}
-          </ul>
+          <!-- </ul> -->
 
           <h1>publication_years</h1>
-          <ul>
+          <!-- <ul> -->
             {% for publication_year in publication_years %}
-                <li>{{publication_year}}</li>
+            <div class="card" style="width: 20rem;">
+             <div class="card-body">
+              <h5 class="card-title">{{publication_year}}</h5>
+              <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+              <a href="#!" class="btn btn-primary">Go somewhere</a>
+            </div>
+          </div>
             {% endfor %}
-          </ul>
+          <!-- </ul> -->
         </body>
     </head>
 </html>
