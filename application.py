@@ -72,24 +72,32 @@ def search_results():
         return "Please sign up first!"
     if request.method == 'POST':
         search = request.form.get("search")
-        # print(search)
         search = list(search)
         temp = ["%"]
         temp = temp + search
         temp.append("%")
-        # print(temp)
         final_search = ''
         for t in temp:
-        # print(final_search)
             final_search += t
-        # db.execute("SET final = :final", {"final": search})
-        # founded_books = db.execute("SELECT * FROM books WHERE MATCH(`isbn_number`,`title`,`author`,`publication_year`) AGAINST (final_search)")
-        # founded_books = db.execute("SELECT * FROM books5 WHERE title LIKE %"+search+"%").fetchall()
-        # db.execute("SET @search = :search ",{"search": search} )
-        # sql = "SELECT * FROM table WHERE col LIKE CONCAT('%', @search, '%')"
-        # founded_books = db.execute(sql, search)
-        founded_books = db.execute("SELECT * FROM books5 WHERE author LIKE (:final_search)",{"final_search":final_search}).fetchall()
-        if founded_books == None:
-            return render_template("search_results.html", results=["not any results"])
-        else:
-            return render_template("search_results.html", results=founded_books)
+
+        # search for isbn_number
+        founded_isbn_numbers = db.execute("SELECT * FROM books5 WHERE isbn_number LIKE (:final_search)",{"final_search":final_search}).fetchall()
+        if len(founded_isbn_numbers) == 0:
+            founded_isbn_numbers=["not any results"]
+
+        # search for author
+        founded_authors =  db.execute("SELECT * FROM books5 WHERE author LIKE (:final_search)",{"final_search":final_search}).fetchall()
+        if len(founded_authors) == 0:
+            founded_authors=["not any results"]
+
+        # search for title
+        founded_titles = db.execute("SELECT * FROM books5 WHERE title LIKE (:final_search)",{"final_search":final_search}).fetchall()
+        if len(founded_titles) == 0:
+            founded_titles=["not any results"]
+
+        # search for publication_year
+        founded_publication_years = db.execute("SELECT * FROM books5 WHERE publication_year LIKE (:final_search)",{"final_search":final_search}).fetchall()
+        if len(founded_publication_years) == 0:
+            founded_publication_years=["not any results"]
+
+        return render_template("search_results.html",isbn_numbers= founded_isbn_numbers,authors=founded_authors,titles=founded_titles, publication_years=founded_publication_years)

@@ -3,9 +3,31 @@
     <head>
         <title>My Webpage</title>
         <body>
+          <h1>isbn_numbers</h1>
           <ul>
-            {% for result in results %}
-                <li>{{result}}</li>
+            {% for isbn_number in isbn_numbers %}
+                <li>{{isbn_number}}</li>
+            {% endfor %}
+          </ul>
+
+          <h1>authors</h1>
+          <ul>
+            {% for author in authors %}
+                <li>{{author}}</li>
+            {% endfor %}
+          </ul>
+
+          <h1>titles</h1>
+          <ul>
+            {% for title in titles %}
+                <li>{{title}}</li>
+            {% endfor %}
+          </ul>
+
+          <h1>publication_years</h1>
+          <ul>
+            {% for publication_year in publication_years %}
+                <li>{{publication_year}}</li>
             {% endfor %}
           </ul>
         </body>
