@@ -12,7 +12,7 @@
             <div class="card" style="width: 20rem;">
              <div class="card-body">
               <h5 class="card-title">{{isbn_number}}</h5>
-              <a href="{{url_for('bookpage',booktext=isbn_number[0] )}}" class="btn btn-primary">Go somewhere</a>
+              <a href="{{url_for('bookpage',book=isbn_number )}}" class="btn btn-primary">Go somewhere</a>
 
             </div>
           </div>
@@ -27,7 +27,7 @@
                <div class="card-body">
                 <h5 class="card-title">{{author}}</h5>
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="{{url_for('bookpage',booktext=author[0] )}}" class="btn btn-primary">Go somewhere</a>
+                <a href="{{url_for('bookpage',book=author )}}" class="btn btn-primary">Go somewhere</a>
               </div>
             </div>
             {% endfor %}
@@ -41,7 +41,7 @@
                  <div class="card-body">
                   <h5 class="card-title">{{title}}</h5>
                   <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
-                  <a href="{{url_for('bookpage',booktext=title[0] )}}" class="btn btn-primary">Go somewhere</a>
+                  <a href="{{url_for('bookpage',book=title )}}" class="btn btn-primary">Go somewhere</a>
                 </div>
               </div>
             {% endfor %}
@@ -54,7 +54,7 @@
              <div class="card-body">
               <h5 class="card-title">{{publication_year}}</h5>
               <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
-              <a href="{{url_for('bookpage',booktext=publication_year[0] )}}" class="btn btn-primary">Go somewhere</a>
+              <a href="{{url_for('bookpage',book=publication_year )}}" class="btn btn-primary">Go somewhere</a>
             </div>
           </div>
             {% endfor %}

@@ -1,5 +1,5 @@
 import os
-
+import re
 from flask import Flask, session,render_template
 from flask import Flask, session,render_template,request
 from flask_session import Session
@@ -101,7 +101,12 @@ def search_results():
             founded_publication_years=["not any results"]
         return render_template("search_results.html",isbn_numbers= founded_isbn_numbers,authors=founded_authors,titles=founded_titles, publication_years=founded_publication_years)
 # book page
-@app.route("/bookpage/<string:booktext>",methods=["POST","GET"])
-def bookpage(booktext):
-    book = booktext
-    return render_template("bookpage.html", isbn_number=booktext)
+@app.route("/bookpage/<book>",methods=["POST","GET"])
+def bookpage(book):
+    # cleaning the book string
+    book = book.replace("'","")
+    book = book.replace(")","")
+    book = book.replace("(","")
+    new_book = book.split(",")
+    labels = ["ISBN Number","Author","Title","Publication Year"]
+    return render_template("bookpage.html", book=new_book, labels=labels)
