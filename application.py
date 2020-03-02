@@ -99,5 +99,9 @@ def search_results():
         founded_publication_years = db.execute("SELECT * FROM books5 WHERE publication_year LIKE (:final_search)",{"final_search":final_search}).fetchall()
         if len(founded_publication_years) == 0:
             founded_publication_years=["not any results"]
-
         return render_template("search_results.html",isbn_numbers= founded_isbn_numbers,authors=founded_authors,titles=founded_titles, publication_years=founded_publication_years)
+# book page
+@app.route("/bookpage/<string:booktext>",methods=["POST","GET"])
+def bookpage(booktext):
+    book = booktext
+    return render_template("bookpage.html", isbn_number=booktext)
