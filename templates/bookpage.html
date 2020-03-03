@@ -6,6 +6,7 @@
     {%for b in book %}
       {{b}}
     {% endfor %}
+    khafe shoooooooo {{myuser}}
     <!-- Section: Author Box -->
 <section class="my-5">
 
@@ -20,8 +21,8 @@
   </div>
 
   <div class="media mt-4 px-1">
-    <img class="card-img-100 d-flex z-depth-1 mr-3" src="https://mdbootstrap.com/img/Photos/Avatars/img%20(8).jpg"
-      alt="Generic placeholder image">
+    <img class="card-img-100 d-flex z-depth-1 mr-3" src="https://images.pexels.com/photos/34592/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+      alt="Generic placeholder image" width="200" height="200">
     <div class="media-body">
       <h5 class="font-weight-bold mt-0">
         <a href="">{{book[1]}} </a>
@@ -32,6 +33,29 @@
   </div>
 
 </section>
-<!--Section: Author Box-->
+
+<!-- textbox for rating -->
+    <form action="{{url_for('submit_rating')}}", method="post">
+      <div class="form-group" >
+        <label for="exampleFormControlTextarea2">rate the book a number from 1 to 5</label>
+        <textarea class="form-control rounded-0" name= "star" id="exampleFormControlTextarea2" rows="3" width="200" height="200"></textarea>
+      </div>
+
+      <!-- textbox for comments -->
+      <style>
+          .shadow-textarea textarea.form-control::placeholder {
+          font-weight: 300;
+            }
+          .shadow-textarea textarea.form-control {
+              padding-left: 0.8rem;
+            }
+      </style>
+      <div class="form-group shadow-textarea">
+        <label for="exampleFormControlTextarea6">write your opinion about this book</label>
+        <textarea class="form-control z-depth-1" name="comment" id="exampleFormControlTextarea6" rows="3" placeholder="Write something here..."></textarea>
+        <button type="button" class="btn btn-outline-success">Submit</button>
+      </div>
+    </form>
+
   </body>
 </html>
