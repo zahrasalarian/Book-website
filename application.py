@@ -1,8 +1,7 @@
 import os
 import re
 from flask_login import current_user
-from flask_login import LoginManager
-from flask import Flask, session,render_template, g
+from flask import Flask, session,render_template
 from flask import Flask, session,render_template,request
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -22,28 +21,6 @@ Session(app)
 # Set up database
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
-
-# defining a user class
-class CurrUser:
-    def __init__(self,username):
-        self.username = username
-
-# initializing the LoginManager.
-app.secret_key = 'xxxxyyyyyzzzzz'
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
-
-# app.run(debug = DEBUG, host=HOST, port= PORT)
-@login_manager.user_loader
-def load_user(user_id):
-    return None
-
-# before request
-@app.before_request
-def before_request():
-    g.user = current_user
 
 @app.route("/")
 def index():
@@ -66,8 +43,6 @@ def sign_up():
             "email": email, "password":password , "username": username })
             db.commit()
             session["users"].append(username)
-            MyUser = CurrUser(username)
-            g.user = MyUser
             return render_template("signup.html" , Username =session["users"])
         else:
             return "sorry this username or email already exists ,you should peak another username"
@@ -86,8 +61,6 @@ def log_in():
         # check if username and password are match
         if (db.execute("SELECT password FROM users WHERE username = :username and password = :password" ,{"username":username, "password":password}).rowcount == 1):
             session["users"].append(username)
-            MyUser = CurrUser(username)
-            g.user = MyUser
             return render_template("login.html" , users=session["users"])
         else:
             return render_template("error.html")
@@ -136,8 +109,15 @@ def bookpage(book):
     book = book.replace("(","")
     new_book = book.split(",")
     labels = ["ISBN Number","Author","Title","Publication Year"]
-    return render_template("bookpage.html",myuser = (g.user).username , book=new_book, labels=labels)
-@app.route("/bookpage/rating_submited",methods=["POST","GET"])
-def submit_rating():
+    return render_template("bookpage.html",myuser = session["users"][0] , book=new_book, labels=labels)
+
+@app.route("/bookpage/rating_submited/<isbn_number_of_the_book>",methods=["POST","GET"])
+def submit_rating(isbn_number_of_the_book):
     rating_out_of_five = request.form.get("star")
-    comment = request.get("comment")
+    comment = request.form.get("comment")
+    stars = db.execute("SELECT rating FROM reviews WHERE isbn_number= :isbn",{"isbn":isbn_number_of_the_book}).fetchall()
+    if len(stars)==0:
+        # return render_template("submit.html",a=rating_out_of_five)
+        db.execute("INSERT INTO rating (isbn_number,user,rating,comment) VALUES (:isbn_number,:user,:rating,:comment)",{"isbn_number":isbn_number_of_the_book,"user":str(session["users"][0]),"rating":str(rating_out_of_five),"comment":comment})
+    else:
+        return render_template("submit.html",a=rating_out_of_five)

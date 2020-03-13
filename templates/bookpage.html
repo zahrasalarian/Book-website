@@ -7,6 +7,7 @@
       {{b}}
     {% endfor %}
     khafe shoooooooo {{myuser}}
+    annnnn {{haha}}
     <!-- Section: Author Box -->
 <section class="my-5">
 
@@ -35,7 +36,7 @@
 </section>
 
 <!-- textbox for rating -->
-    <form action="{{url_for('submit_rating')}}", method="post">
+    <form action="{{url_for('submit_rating',isbn_number_of_the_book=book[0])}}" method="post">
       <div class="form-group" >
         <label for="exampleFormControlTextarea2">rate the book a number from 1 to 5</label>
         <textarea class="form-control rounded-0" name= "star" id="exampleFormControlTextarea2" rows="3" width="200" height="200"></textarea>
@@ -53,7 +54,7 @@
       <div class="form-group shadow-textarea">
         <label for="exampleFormControlTextarea6">write your opinion about this book</label>
         <textarea class="form-control z-depth-1" name="comment" id="exampleFormControlTextarea6" rows="3" placeholder="Write something here..."></textarea>
-        <button type="button" class="btn btn-outline-success">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
       </div>
     </form>
 
