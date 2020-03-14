@@ -110,7 +110,6 @@ def bookpage(book):
     new_book = book.split(",")
     labels = ["ISBN Number","Author","Title","Publication Year"]
     stars = db.execute("SELECT rating FROM reviews WHERE isbn_number= :isbn",{"isbn":new_book[0]}).fetchall()
-    comments = db.execute("SELECT comment FROM reviews WHERE isbn_number= :isbn",{"isbn":new_book[0]}).fetchall()
     if len(stars)==0:
         avg_star = 0
     else:
@@ -130,21 +129,18 @@ def bookpage(book):
                 print(s)
                 sum += int(s)
         avg_star = float("{0:.2f}".format(sum/(len(stars) - math.floor(len(stars)/2) ) ))
-    return render_template("bookpage.html",myuser = session["users"][0] , book=new_book, labels=labels,avg_star= avg_star  )
+        comments = db.execute("SELECT username,comment FROM reviews WHERE isbn_number= :isbn",{"isbn":new_book[0]}).fetchall()
+
+    return render_template("bookpage.html",myuser = session["users"][0] , book=new_book, labels=labels,avg_star=avg_star,comments= comments )
 
 @app.route("/bookpage/rating_submited/<isbn_number_of_the_book>",methods=["POST","GET"])
 def submit_rating(isbn_number_of_the_book):
     rating_out_of_five = request.form.get("star")
     comment = request.form.get("comment")
-    stars = db.execute("SELECT rating FROM reviews WHERE isbn_number= :isbn",{"isbn":isbn_number_of_the_book}).fetchall()
-    # if len(stars)==0:
-        # return render_template("submit.html",a=rating_out_of_five)
-    db.execute("INSERT INTO reviews (isbn_number,username,rating,comment) VALUES (:isbn_number,:username,:rating,:comment)",{"isbn_number":isbn_number_of_the_book,"username":str(session["users"][0]),"rating":str(rating_out_of_five),"comment":comment})
-    db.commit()
-        # return render_template("submit.html",a="zh")
-    # else:
-    # comments = db.execute("SELECT comment,usernames FROM reviews WHERE isbn_number= :isbn",{"isbn":isbn_number_of_the_book}).fetchall()
-    # if len(comments) == 0:
-    #     db.execute("INSERT INTO reviews (isbn_number,username,rating,comment) VALUES (:isbn_number,:username,:rating,:comment)",{"isbn_number":isbn_number_of_the_book,"username":str(session["users"][0]),"rating":str(rating_out_of_five),"comment":comment})
-
-    return render_template("submit.html",a="hih")
+    review = db.execute("SELECT comment FROM reviews WHERE isbn_number= :isbn AND username= :username",{"isbn":isbn_number_of_the_book, "username":session["users"][0]}).fetchall()
+    if len(review) == 0:
+        db.execute("INSERT INTO reviews (isbn_number,username,rating,comment) VALUES (:isbn_number,:username,:rating,:comment)",{"isbn_number":isbn_number_of_the_book,"username":str(session["users"][0]),"rating":str(rating_out_of_five),"comment":comment})
+        db.commit()
+    else:
+        return render_template("submit.html",text="you have already submitted a review for this book")
+    return render_template("submit.html",text="your review has submitted")

@@ -34,7 +34,17 @@
   </div>
 
 </section>
-<div class="d-inline-flex p-2">I'm an inline flexbox container!</div>
+<!-- <div class="d-inline-flex p-2">I'm an inline flexbox container!</div> -->
+
+<!-- comments bar -->
+{% for comment in comments %}
+  <div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">{{comment[0]}}</h5>
+    <p class="card-text">{{comment[1]}}</p>
+  </div>
+</div>
+{% endfor %}
 
 <!-- textbox for rating -->
     <form action="{{url_for('submit_rating',isbn_number_of_the_book=book[0])}}" method="post">
