@@ -3,26 +3,16 @@
 
 <html>
   <body>
-    <div class="">
-      {{myApi}}
-    </div>
-     <div class="">
-     ratings the book has received from goodreads website :{{ratings_the_book_has_received_from_goodreads}}
-    </div>
-    <div class="">
-      average rating from goodreades website :{{average_rating_from_goodreades}}
-    </div>
-    <!-- Section: Author Box -->
+  <!-- Section: Author Box -->
 <section class="my-5">
-
   <!-- Card header -->
   <div class="card-header border-0 font-weight-bold d-flex justify-content-between">
     <p class="mr-4 mb-0">{{labels[0]}} : {{book[0]}}</p>
-    <ul class="list-unstyled list-inline mb-0">
+    <!-- <ul class="list-unstyled list-inline mb-0">
       <li class="list-inline-item"><a href="" class="mr-3"><i class="fas fa-envelope mr-1"></i>Send message</a></li>
       <li class="list-inline-item"><a href="" class="mr-3"><i class="fas fa-user mr-1"></i>See profile</a></li>
       <li class="list-inline-item"><a href="" class="mr-3"><i class="fas fa-rss mr-1"></i>Follow</a></li>
-    </ul>
+    </ul> -->
   </div>
 
   <div class="media mt-4 px-1">
@@ -38,22 +28,32 @@
   </div>
 
 </section>
-<!-- <div class="d-inline-flex p-2">I'm an inline flexbox container!</div> -->
-
-<!-- comments bar -->
-{% for comment in comments %}
-  <div class="card" style="width: 18rem;">
-  <div class="card-body">
-    <h5 class="card-title">{{comment[0]}}</h5>
-    <p class="card-text">{{comment[1]}}</p>
-  </div>
-</div>
-{% endfor %}
-
+<!-- information of goodreads website -->
+    <div class="">
+    <h6>Ratings the book has received from goodreads website :{{ratings_the_book_has_received_from_goodreads}}</h6>
+    </div>
+    <div class="">
+     <h6>Average rating from goodreades website :{{average_rating_from_goodreades}}</h6>
+    </div>
+    <div class="">
+      <h6>Average stars in our website :{{avg_star}}</h6>
+    </div>
+    <!-- comments bar -->
+    <div class="">
+      <h3>Comments bar</h3>
+    </div>
+    {% for comment in comments %}
+      <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{comment[0]}}</h5>
+        <p class="card-text">{{comment[1]}}</p>
+      </div>
+    </div>
+    {% endfor %}
 <!-- textbox for rating -->
     <form action="{{url_for('submit_rating',isbn_number_of_the_book=book[0])}}" method="post">
       <div class="form-group" >
-        <label for="exampleFormControlTextarea2">{{avg_star}}</label>
+        <label for="exampleFormControlTextarea2"><h6>Rate the out of five stars</h6></label>
         <textarea class="form-control rounded-0" name= "star" id="exampleFormControlTextarea2" rows="3" width="200" height="200"></textarea>
       </div>
 
@@ -67,7 +67,7 @@
             }
       </style>
       <div class="form-group shadow-textarea">
-        <label for="exampleFormControlTextarea6">write your opinion about this book</label>
+        <label for="exampleFormControlTextarea6"><h6>write your opinion about this book</h6></label>
         <textarea class="form-control z-depth-1" name="comment" id="exampleFormControlTextarea6" rows="3" placeholder="Write something here..."></textarea>
         <button type="submit" class="btn btn-primary">Submit</button>
       </div>
