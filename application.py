@@ -1,7 +1,7 @@
 import os
-import re,math
+import re,math,requests
 from flask_login import current_user
-from flask import Flask, session,render_template
+from flask import Flask, session,render_template,jsonify
 from flask import Flask, session,render_template,request
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -129,9 +129,13 @@ def bookpage(book):
                 print(s)
                 sum += int(s)
         avg_star = float("{0:.2f}".format(sum/(len(stars) - math.floor(len(stars)/2) ) ))
-        comments = db.execute("SELECT username,comment FROM reviews WHERE isbn_number= :isbn",{"isbn":new_book[0]}).fetchall()
-
-    return render_template("bookpage.html",myuser = session["users"][0] , book=new_book, labels=labels,avg_star=avg_star,comments= comments )
+    comments = db.execute("SELECT username,comment FROM reviews WHERE isbn_number= :isbn",{"isbn":new_book[0]}).fetchall()
+    # using goodreads API key to get information about a book
+    res = requests.get("https://www.goodreads.com/book/review_counts.json",params={"key":"WOeVdlmL1oTyhsCdAUw5NA","isbns":"{}".format(new_book[0])})
+    data = res.json()
+    average_rating_from_goodreades = data["books"][0]['average_rating']
+    ratings_the_book_has_received_from_goodreads = data["books"][0]['ratings_count']
+    return render_template("bookpage.html",myuser = session["users"][0] , book=new_book, labels=labels,avg_star=avg_star,comments= comments ,myApi= data,average_rating_from_goodreades=average_rating_from_goodreades , ratings_the_book_has_received_from_goodreads=ratings_the_book_has_received_from_goodreads)
 
 @app.route("/bookpage/rating_submited/<isbn_number_of_the_book>",methods=["POST","GET"])
 def submit_rating(isbn_number_of_the_book):
@@ -144,3 +148,22 @@ def submit_rating(isbn_number_of_the_book):
     else:
         return render_template("submit.html",text="you have already submitted a review for this book")
     return render_template("submit.html",text="your review has submitted")
+
+@app.route("/api/<int:isbn>",methods=["GET"])
+def api(isbn):
+    book = db.execute("SELECT * FROM books5 WHERE isbn_number= :isbn",{"isbn":str(isbn)}).fetchall()
+    if len(book)==0:
+        return "Error 404"
+    # using goodreads API key to get information about a book
+    res = requests.get("https://www.goodreads.com/book/review_counts.json",params={"key":"WOeVdlmL1oTyhsCdAUw5NA","isbns":"{}".format(isbn)})
+    data = res.json()
+    average_rating_from_goodreades = data["books"][0]['average_rating']
+    ratings_the_book_has_received_from_goodreads = data["books"][0]['ratings_count']
+    return jsonify({
+                    "title": book[0][1],
+                    "author": book[0][2],
+                    "year": int(book[0][3]),
+                    "isbn": book[0][0],
+                    "review_count": ratings_the_book_has_received_from_goodreads,
+                    "average_score": float(average_rating_from_goodreades)
+                    })
