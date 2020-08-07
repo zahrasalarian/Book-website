@@ -1,3 +1,3 @@
 # Book Website
 
-A book website written in Python and JavaScript
+A book website written in Python with Flask
