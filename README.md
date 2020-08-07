@@ -1,3 +1,3 @@
-# Project 1
+# Book Website
 
-Web Programming with Python and JavaScript
+A book website written in Python and JavaScript
